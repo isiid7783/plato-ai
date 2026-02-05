@@ -1,0 +1,128 @@
+from typing import Dict
+from enum import Enum
+
+
+# =========================
+# QUESTION GENRE (importせず独立定義)
+# =========================
+
+class QUESTION_GENRE(Enum):
+    EXPLAIN = "EXPLAIN"
+    STRUCTURE = "STRUCTURE"
+    COMPARE = "COMPARE"
+    DEFINE = "DEFINE"
+    THINK = "THINK"
+    META = "META"
+    UNKNOWN = "UNKNOWN"
+
+
+# =========================
+# ENTRY POINT
+# =========================
+
+def generate_with_control(
+    genre: QUESTION_GENRE,
+    user_text: str,
+    ctx: Dict[str, bool]
+) -> str:
+    """
+    The ONLY place where text generation is allowed.
+    """
+
+    prompt = build_prompt(genre, user_text, ctx)
+
+    # =========================
+    # LLM CALL (currently disabled)
+    # =========================
+    # Replace this block with actual LLM call later.
+    # Example:
+    # response = call_openai(prompt)
+
+    response = simulate_generation(prompt)
+
+    return response
+
+
+# =========================
+# PROMPT BUILDER
+# =========================
+
+def build_prompt(
+    genre: QUESTION_GENRE,
+    user_text: str,
+    ctx: Dict[str, bool]
+) -> str:
+    base_rules = (
+        "You are Plato AI.\n"
+        "You do not make decisions for the user.\n"
+        "You do not give commands or prescriptions.\n"
+        "You do not provide final answers or conclusions.\n"
+        "Your role is limited to explanation, clarification, and structural support.\n\n"
+    )
+
+    if genre == QUESTION_GENRE.EXPLAIN:
+        return (
+            base_rules +
+            "Explain the subject by clarifying mechanisms, structure, and assumptions.\n\n"
+            f"Question:\n{user_text}"
+        )
+
+    if genre == QUESTION_GENRE.STRUCTURE:
+        return (
+            base_rules +
+            "Organize the subject into distinct components and describe their relationships.\n\n"
+            f"Question:\n{user_text}"
+        )
+
+    if genre == QUESTION_GENRE.COMPARE:
+        return (
+            base_rules +
+            "Compare the items using explicit criteria without ranking or recommendation.\n\n"
+            f"Question:\n{user_text}"
+        )
+
+    if genre == QUESTION_GENRE.DEFINE:
+        return (
+            base_rules +
+            "Clarify the definition and boundaries of the concept, including exclusions.\n\n"
+            f"Question:\n{user_text}"
+        )
+
+    if genre == QUESTION_GENRE.THINK:
+        return (
+            base_rules +
+            "Support reflective thinking by surfacing assumptions and constraints.\n\n"
+            f"Question:\n{user_text}"
+        )
+
+    if genre == QUESTION_GENRE.META:
+        return (
+            base_rules +
+            "Evaluate the structure, intent, and validity of the question itself.\n\n"
+            f"Question:\n{user_text}"
+        )
+
+    return (
+        base_rules +
+        "Provide minimal clarification without extending beyond the question.\n\n"
+        f"Question:\n{user_text}"
+    )
+
+
+# =========================
+# TEMPORARY GENERATION (SAFE PLACEHOLDER)
+# =========================
+
+def simulate_generation(prompt: str) -> str:
+    """
+    Placeholder generation.
+    This prevents uncontrolled output until a real LLM is connected.
+    """
+
+    return (
+        "Generated response (simulation):\n\n"
+        "The system has accepted this question for controlled generation.\n\n"
+        "At this stage, Plato AI confirms that the question can be addressed "
+        "within defined structural and ethical boundaries.\n\n"
+        "Actual language generation will be connected in the next step."
+    )
